@@ -1,29 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              clifford: "#da373d",
-            },
-          },
-        },
-      };
-    </script>
-    <title>Go + Htmx</title>
-  </head>
-  <body class="">
-    <h1>Hello, World!</h1>
 
-    {{ range .Books }}
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/htmx.org@1.9.6" integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni" crossorigin="anonymous"></script>
+  <title>Your Reading List</title>
+</head>
 
-    <p>{{ .Title }} - {{ .Author }}</p>
+  <body
+    class="relative h-screen items-center flex flex-col overflow-hidden bg-gray-50 py-12 font-mono text-gray-900 px-6">
+    <h2 class="text-6xl font-medium mb-6">Your Reading List</h2>
+    <div class="grid grid-cols-2 gap-10 h-full overflow-y-hidden">
+      <div class="flex flex-col h-full overflow-y-auto">
+        <h3 class="text-lg text-gray-400 mb-2">Currently Reading</h3>
+        <div id="book-list" class="overflow-y-auto h-2/3">
+          <!-- <div class="font-bold border p-2 mb-2 border-gray-400 shadow-md flex hover:bg-white hover:cursor-pointer">
+            <div class="mr-auto">
+              <p>A Fire Upon the Deep</p>
+              <p class="text-xs text-gray-600">Vernor Vinge</p>
+            </div>
+            <div class="">d</div>
+           </div> -->
+          {{ range .Books }}
 
-    {{ end }}
+          <div class="font-bold border p-2 mb-2 border-gray-400 shadow-md flex hover:bg-white hover:cursor-pointer">
+            <div class="mr-auto">
+              <p>{{ .Title }}</p>
+              <p class="text-xs text-gray-400">{{ .Author }}</p>
+            </div>
+            <!-- <div class="">d</div> -->
+          </div>
+
+          {{ end }}
+        </div>
+
+      </div>
+      <div class="flex flex-col">
+        <h3 class="text-lg text-gray-400 mb-2">Add a Book</h3>
+        <form class="flex flex-col" hx-post="/add-book/" hx-swap="beforeend" hx-target="#book-list">
+          <label class="text-xs" for="title">Title:</label>
+          <input class="border border-gray-400 mb-2" type="text" name="title" id="title" />
+          <label class="text-xs" for="author">Author:</label>
+          <input class="border border-gray-400 mb-2" type="text" name="author" id="author" />
+          <button
+            class="p-1 font-extrabold hover:text-gray-950 border border-gray-600 hover:bg-gray-50 bg-white hover:border-gray-900"
+            type="submit">Add Book</button>
+        </form>
+    </div>
   </body>
+
+
+
+</body>
+
+
+
+
+
 </html>
